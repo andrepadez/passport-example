@@ -7,12 +7,29 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-var configDb = require('./config/db')['dev'];
-console.log(configDb);
+var env = 'dev';
 
-
+var configDb = require('./config/db')[env];
 var port = process.env.PORT || 8080;
+
 var app = express();
+app.use(morgan(env));
+app.use(cookieParser());
+app.use(bodyParser());
+app.set('view engine', 'ejs');
+
+//passport
+app.use( session( {secret: 'somethingsomethingdarkside'} ) );
+app.use( passport.initialize() );
+app.use( passport.session() );
+app.use( flash() );
+
+require('./app/routes')(app, passport);
+
 mongoose.connect(configDb.url, function(err){
-    console.log(err || 'connected');
-})
+    console.log(err || 'connected to mongoose');
+});
+
+app.listen(port, function(){
+    console.log('express connected on port ', port);
+});
