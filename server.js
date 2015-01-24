@@ -10,6 +10,8 @@ var session = require('express-session');
 var env = 'dev';
 
 var configDb = require('./config/db')[env];
+require('./config/passport')(passport);
+
 var port = process.env.PORT || 8080;
 
 var app = express();
