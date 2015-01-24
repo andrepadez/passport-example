@@ -1,4 +1,6 @@
 var User = require('../models/user');
+var SignupStrategy = require('./local-signup');
+var LoginStrategy = require('./local-login');
 
 module.exports = function(passport){
 
@@ -12,7 +14,7 @@ module.exports = function(passport){
         });
     });
 
-    var SignupStrategy = require('./local-signup');
     passport.use('local-signup', SignupStrategy);
+    passport.use('local-login', LoginStrategy);
 
 };
